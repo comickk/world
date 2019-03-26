@@ -25,18 +25,18 @@ cc.Class({
     //体温
 
     //-----体质类-----
-    //力量
-    //敏捷
-    //智力
+    //力量strength
+    //敏捷agility
+    //智力intellect
     //
   
-    //-----抗性-----
-    //物理
-    //火
-    //冰
-    //电
-    //风
-    //毒
+    //-----抗性-----resistance
+    //物理 physics
+    //火  FIRE
+    //冰  ice
+    //电  electricity
+    //风   wind
+    //毒   poison
     },
     
 });

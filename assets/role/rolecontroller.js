@@ -37,7 +37,10 @@ cc.Class({
 			set:function(value){
 				this._id = value;
 			}
-		}		
+		}	,	
+
+		_nick:cc.Label, 	//昵称标签
+		_action:cc.Sprite,	//动作指示
     
 	},
 
@@ -51,6 +54,9 @@ cc.Class({
 	start() {
 		//this._collider = this._map.getChildByName('collinor').getComponent(cc.TiledLayer);
 		_state = gd.State.IDLE;
+
+		this._nick = this.node.getChildByName('nick');	//取得名称组件
+		this._action =this.node.getChildByName('action');//取得动作示意组件
 	},
 
 	// update (dt) {},
@@ -75,8 +81,9 @@ cc.Class({
 		}
 		
 		this.roleMove();
-	},
+	},	
 	
+
 	//做某个动作
 	doWhat(who,what,obj){
 

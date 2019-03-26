@@ -25,6 +25,7 @@ var GameData ={
     // }),
 
     RoleType:cc.Enum({
+        SELF:1,
         PLAYER:-1,
         HUMAN:-1,
         ANIMAL:-1,   
