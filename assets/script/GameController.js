@@ -1,4 +1,4 @@
-var _rolecontroller = null;
+var _self = null;
 var Communicaton = require('Communicaton');
 var gd = require('GameData');
 var _roles = new Map();
@@ -71,11 +71,12 @@ cc.Class({
 				dir = gd.Direct.RIGHT;
 				break;
 			case cc.macro.KEY.space: //做动作,动作类型根据当前装备物品
-				break;
+				_self.doSomeThing(_self.id);
+				return;
 			default:
 				return;
 		}
-		if (_rolecontroller) _rolecontroller.setMoveState(dir, 1);
+		if (_self) _self.setMoveState(dir, 1);
 	},
 
 	onKeyUp(event) {
@@ -99,7 +100,7 @@ cc.Class({
 			default:
 				return;
 		}
-		if (_rolecontroller) _rolecontroller.setMoveState(dir, 0);
+		if (_self) _self.setMoveState(dir, 0);
 	},
 
 	//生成角色(玩家 npc)
@@ -111,14 +112,14 @@ cc.Class({
 				role.parent = this._rolelayer;
 				role.setPosition(-48, -48);
 
-				_rolecontroller = role.getComponent('rolecontroller');
+				_self = role.getComponent('rolecontroller');
 
-				_roles.set(id, _rolecontroller);
-				_rolecontroller.id = id; //Math.round(Math.random() * 10000);
-				_rolecontroller._map = this._map;
-				_rolecontroller._collider = this._map.getChildByName('collinor').getComponent(cc.TiledLayer);
+				_roles.set(id, _self);
+				_self.id = id; //Math.round(Math.random() * 10000);
+				_self._map = this._map;
+				_self._collider = this._map.getChildByName('collinor').getComponent(cc.TiledLayer);
 
-				_rolecontroller.setCommunicator(Communicaton);
+				_self.setCommunicator(Communicaton);
 				break;
 			case gd.RoleType.PLAYER:
 				var role = cc.instantiate(this._role);
@@ -149,7 +150,7 @@ cc.Class({
 
 	moveRole(id,x,y,anim,timelen){
 		if(!id || !x || !y || anim || !timelen) return;
-		if (id - 0 != _rolecontroller.id - 0 && _roles.has(who)) {
+		if (id - 0 != _self.id - 0 && _roles.has(who)) {
 			var otherrole = _roles.get(id);
 			var v = getCanvasPos(cc.v2(x, y));
 

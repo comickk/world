@@ -41,7 +41,9 @@ cc.Class({
 
 		_nick:cc.Label, 	//昵称标签
 		_action:cc.Sprite,	//动作指示
-    
+		_actcdmask:cc.Sprite,//动作cd 遮罩
+
+		_actcdtime:3,//动作cd    
 	},
 
 	 //onLoad() {		
@@ -55,8 +57,10 @@ cc.Class({
 		//this._collider = this._map.getChildByName('collinor').getComponent(cc.TiledLayer);
 		_state = gd.State.IDLE;
 
-		this._nick = this.node.getChildByName('nick');	//取得名称组件
-		this._action =this.node.getChildByName('action');//取得动作示意组件
+		this._nick = this.node.getChildByName('nick').getComponent(cc.Label);	//取得名称组件
+		//cc.find("actiontip/action", this.node);
+		this._action =this.node.getChildByName('action').getComponent(cc.Sprite);//取得动作示意组件
+		this._actcdmask = cc.find("action/cdmask", this.node).getComponent(cc.Sprite);
 	},
 
 	// update (dt) {},
@@ -85,8 +89,35 @@ cc.Class({
 	
 
 	//做某个动作
-	doWhat(who,what,obj){
+	doSomeThing(who,what,obj){
+		if(who == this.id){//自己做 忽略what obj
+			if(_state-0 >= gd.State.ATTACK-0 ) return;
+			_state = gd.State.ATTACK;
+			this.showActionTip('act01',3);
+			//确定 what  和 obj			
+			_comm.speak({ title:'dowhat?',who: this.id, what:0,obj:0 });
+		}else{//别人做
 
+		}
+	},
+
+	showActionTip(act,time){	
+		var self = this;
+		cc.loader.loadRes('ActionTip/'+act, cc.SpriteFrame, (err, spriteFrame)=> {
+			self._action.node.active = true;
+			self._action.spriteFrame = spriteFrame;
+		});
+		
+		this._actcdtime = time;
+		this.schedule(()=> {			
+			this._actcdmask.fillRange = this._actcdtime/3;	
+			this._actcdtime-=0.2;		
+			 if(this._actcdtime <= 0){
+				 _state = gd.State.IDLE;
+				// 	this._action.node.active = false;
+				cc.log('cd end')
+			 }			
+		},0.2,time/0.2-1,0);
 	},
 
 	//非自己角色的移动
